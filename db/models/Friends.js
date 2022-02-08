@@ -2,7 +2,7 @@
 const dbInfo = require("../config/config.json");
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = new Sequelize(
-  "postgres://" +
+"postgres://" +
     dbInfo.development.username +
     ":" +
     dbInfo.development.password +
