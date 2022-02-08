@@ -28,10 +28,3 @@ const Friends = sequelize.define("Friend",{
 })
 
 module.exports = Friends;  
-
-// Friends.build({
-//   id,
-//   firstName,
-//   lastName,
-//   nickname
-// });
