@@ -9,7 +9,6 @@ const friendRouter = require("./routes/friendRoutes");
 //instantiate app,router and connect to database
 const app = new Koa();
 const router = new Router();
-const sequelize = new Sequelize('postgres://'+dbInfo.development.username+':'+ dbInfo.development.password+'@'+ dbInfo.development.host +':'+'5432'+ '/'+ dbInfo.development.database);
 
 //adding middleware to the app
 app.use(bodyParser());
