@@ -1,4 +1,5 @@
 const Errors = require("error");
+const Friends = require('../db/models/Friends');
 
 //error validation when adding to the database
 async function errorValidation(ctx,next){
@@ -6,11 +7,28 @@ async function errorValidation(ctx,next){
         await next();
     } 
     catch (error) {
-        if (!(error instanceof Errors.GenericError) || error.status >= 500) {
-            throw error;
-        }
+        const body = ctx.request.body;
+        const requiredFieldsExist = body.id && body.firstName && body.lastName;
 
-        ctx.response.body = "Missing required fields or id already exists";
+        const idIsUnique= await Friends.findAll({
+            where:{
+                "id":body.id
+            }
+        });
+
+        if(!requiredFieldsExist) {
+            ctx.response.body = {
+                type: "error",
+                errorMessage:"Missing a required field"
+            };
+        }
+    
+        if(idIsUnique!==null) {
+            ctx.response.body = {
+                type: "error",
+                errorMessage:"ID is not unique"
+            };
+        }
     }
 }
 
