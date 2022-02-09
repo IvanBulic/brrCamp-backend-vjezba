@@ -1,37 +1,32 @@
 const Errors = require("error");
-const Friends = require("../db/models/Friends");
+const Friends = require("../db/models/friend");
 
 //error validation when adding to the database
 async function errorValidation(ctx, next) {
   try {
-    await next();
-  } catch (error) {
     const body = ctx.request.body;
     const requiredFieldsExist = body.firstName && body.lastName;
 
     if (!requiredFieldsExist) {
-      ctx.response.body = {
-        type: "error",
-        errorMessage: "Missing a required field",
-      };
-      return;
+      throw "Missing a required field";
     }
 
-    if (/^[a-zA-Z]+$/.test(body.firstName)) {
-      ctx.response.body = {
-        type: "error",
-        errorMessage: "Name cannot contain numbers or special characters",
-      };
-      return;
+    if (/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/.test(body.firstName)) {
+      throw "Name cannot contain numbers or special characters";
     }
 
-    if (/^[a-zA-Z]+$/.test(body.lastName)) {
-      ctx.response.body = {
-        type: "error",
-        errorMessage: "Last name cannot contain numbers or special characters",
-      };
-      return;
+    if (/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/.test(body.lastName)) {
+      throw  "Last name cannot contain numbers or special characters";
     }
+
+    await next();
+  } 
+  catch (error) {
+    ctx.response.body = {
+      type: "error",
+      errorMessage: error
+    }
+    ctx.response.status = 400;
   }
 }
 
