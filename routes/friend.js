@@ -1,13 +1,13 @@
 const router = new (require("koa-router"))();
-const Friends = require("../db/models/Friends");
+const Friend = require("../db/models/friend");
 const errorValidation = require("../middleware/errorValidation");
+const db = require('../db/sequelize')
+const sequelize = require('sequelize');
 
-router.post("/friend", errorValidation, async (ctx, next) => {
+router.post("/friend",errorValidation,async (ctx, next) => {
   const body = ctx.request.body;
 
-  await Friends.sync();
-
-  ctx.response.body = await Friends.create(body);
+  ctx.response.body = await Friend(db,sequelize.DataTypes).create(body);
 });
 
 module.exports = router;
