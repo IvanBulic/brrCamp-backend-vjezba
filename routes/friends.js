@@ -1,8 +1,10 @@
 const router = new (require("koa-router"))();
-const Friends = require("../db/models/Friends");
+const sequelize = require("sequelize");
+const Friends = require("../db/models/friend");
+const db = require('../db/sequelize');
 
-router.get("/friends", async (ctx, next) => {
-  ctx.body = await Friends.findAll();
+router.get("/friends", async (ctx) => {
+    ctx.body = await Friends(db,sequelize.DataTypes).findAll();
 });
 
 module.exports = router;
