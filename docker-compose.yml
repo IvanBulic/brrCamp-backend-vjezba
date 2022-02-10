@@ -1,0 +1,23 @@
+version: "3.1"  # optional since v1.27.0
+
+
+services:
+  db:
+    image: "postgres"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "123456"
+      POSTGRES_USER: "postgres"
+  backend:
+    build: .
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    environment:
+      DB_PASSWORD: "123456"
+      DB_USER: "postgres"
+      DB_HOST: db
+
+      
